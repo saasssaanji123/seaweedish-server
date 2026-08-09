@@ -1,0 +1,8 @@
+.git
+.gitignore
+.env
+**/__pycache__
+**/*.pyc
+backend/reexport_model.py
+backend/saved_images/*
+backend/uploads/*

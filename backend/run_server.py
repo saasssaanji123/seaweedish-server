@@ -60,7 +60,7 @@ if __name__ == "__main__":
                 logger.warning(f"Failed to kill process {pid}")
 
     host = "0.0.0.0"
-    port = 8000
+    port = int(os.getenv("PORT", "8000"))
 
     # If port is occupied, attempt to free it (Windows only). This helps when
     # previous runs left a Python process bound to the port.

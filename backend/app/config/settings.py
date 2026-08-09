@@ -21,13 +21,10 @@ API_TITLE = "PhycoSense Seaweed Identifier API"
 API_VERSION = "1.0.0"
 API_DESCRIPTION = "AI-powered seaweed species classification API"
 
-# CORS settings
-CORS_ORIGINS = [
-    "http://localhost",
-    "http://localhost:3000",
-    "http://localhost:8080",
-    "http://192.168.1.*",  # Local network access
-]
+# CORS settings. Set CORS_ORIGINS as a comma-separated environment variable in
+# Railway, for example: https://your-frontend.up.railway.app
+cors_origins = os.getenv("CORS_ORIGINS", "http://localhost,http://localhost:3000,http://localhost:8080")
+CORS_ORIGINS = [origin.strip() for origin in cors_origins.split(",") if origin.strip()]
 
 # Create uploads and saved images directories if they don't exist
 UPLOAD_DIR.mkdir(exist_ok=True)
