@@ -4,7 +4,6 @@ import uuid
 from fastapi import APIRouter, UploadFile, File, HTTPException
 from pathlib import Path
 
-from app.services import ModelService
 from app.schemas import PredictionResponse, ErrorResponse
 from app.utils import ImageProcessor
 from app.config import UPLOAD_DIR, SAVED_IMAGES_DIR, MAX_FILE_SIZE, ALLOWED_EXTENSIONS
@@ -29,6 +28,8 @@ async def predict(file: UploadFile = File(...)):
     Returns prediction with confidence and all class probabilities
     """
     try:
+        from app.services import ModelService
+
         # Validate file type
         if not file.filename:
             raise HTTPException(status_code=400, detail="No filename provided")
@@ -112,6 +113,8 @@ async def predict_base64(data: dict):
     ```
     """
     try:
+        from app.services import ModelService
+
         if "image_data" not in data:
             raise HTTPException(status_code=400, detail="Missing 'image_data' field")
         
@@ -156,6 +159,8 @@ async def predict_base64(data: dict):
 )
 async def health_check():
     """Check API and model health"""
+    from app.services import ModelService
+
     model_service = ModelService()
     return {
         "status": "healthy",

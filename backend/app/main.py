@@ -6,7 +6,6 @@ import uvicorn
 
 from app.config import API_TITLE, API_VERSION, API_DESCRIPTION, CORS_ORIGINS
 from app.routes import router as prediction_router
-from app.services import ModelService
 
 # Configure logging
 logging.basicConfig(
@@ -40,16 +39,8 @@ app.include_router(prediction_router)
 
 @app.on_event("startup")
 async def startup_event():
-    """Initialize model on startup"""
+    """Start the API without blocking on TensorFlow model initialization."""
     logger.info("Starting PhycoSense API...")
-    try:
-        model_service = ModelService()
-        if model_service.is_model_loaded():
-            logger.info("✓ Model loaded successfully")
-        else:
-            logger.warning("⚠ Model not found - will be loaded when available")                                                                   
-    except Exception as e:
-        logger.error(f"✗ Error during startup: {str(e)}")
 
 
 @app.on_event("shutdown")                                                                                                                                 
@@ -72,6 +63,12 @@ async def read_root():
             "health": "/api/health (GET)"
         }
     }
+
+
+@app.get("/health", tags=["health"])
+async def health_check():
+    """Lightweight liveness check for Railway and other platform probes."""
+    return {"status": "ok"}
 
 
 @app.exception_handler(Exception)
