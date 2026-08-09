@@ -5,7 +5,6 @@ from fastapi import APIRouter, UploadFile, File, HTTPException
 from pathlib import Path
 
 from app.schemas import PredictionResponse, ErrorResponse
-from app.utils import ImageProcessor
 from app.config import UPLOAD_DIR, SAVED_IMAGES_DIR, MAX_FILE_SIZE, ALLOWED_EXTENSIONS
 
 logger = logging.getLogger(__name__)
@@ -29,6 +28,7 @@ async def predict(file: UploadFile = File(...)):
     """
     try:
         from app.services import ModelService
+        from app.utils import ImageProcessor
 
         # Validate file type
         if not file.filename:
@@ -114,6 +114,7 @@ async def predict_base64(data: dict):
     """
     try:
         from app.services import ModelService
+        from app.utils import ImageProcessor
 
         if "image_data" not in data:
             raise HTTPException(status_code=400, detail="Missing 'image_data' field")
